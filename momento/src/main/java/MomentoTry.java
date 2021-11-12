@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class MomentoTry {
     public static void main(String[] args){
@@ -22,18 +20,24 @@ public class MomentoTry {
 class Document{
     private String text;
 
-    private List actions =  new ArrayList <String>();
+    private List<Map.Entry<Integer, String>> actions =  new ArrayList<>();
 
     Document(){
         text = "";
     }
 
+    public void addAction(String value, Integer action){
+        actions.add(new AbstractMap.SimpleEntry<>(action, value));
+    }
+
     public void write(String textString){
+        addAction(textString, 0);
         text += textString;
     }
 
     public void removeWord(){
         String[] words = text.split(" ");
+        addAction(words[words.length-1], 1);
         text = String.join(" ", Arrays.copyOf(words, words.length - 1));
     }
 
@@ -46,7 +50,31 @@ class Document{
         System.out.println(text);
     }
 
-    public void undo(){
+    public void undoRemove(String lastRemoved){
+        text = text + " " + lastRemoved;
+    }
 
+    public void undoWrite(String lastWritten){
+        int startInd = 0;
+        int endInd = text.length() - lastWritten.length() - 1;
+        text = text.substring(0, endInd + 1);
+    }
+
+    public void undo(){
+        int size = actions.size();
+        if(size == 0) return;
+
+        Map.Entry lastAction = actions.get(size - 1);
+
+        if((int) lastAction.getKey() == 1){
+            String lastRemoved = (String) lastAction.getValue();
+            undoRemove(lastRemoved);
+        }
+
+        if((int) lastAction.getKey() == 0){
+            String lastWritten = (String) lastAction.getValue();
+            undoWrite(lastWritten);
+        }
+        actions.remove(size - 1);
     }
 }

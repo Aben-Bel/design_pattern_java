@@ -44,5 +44,12 @@ public class MomentoTryTest {
 
         docTester.undo();
         assertEquals("Written Something Let's add this text.",docTester.getString());
+
+        docTester.undo();
+        docTester.undo();
+        assertEquals("",docTester.getString());
+
+        docTester.undo();
+        assertEquals("",docTester.getString());
     }
 }
