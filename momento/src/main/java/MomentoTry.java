@@ -1,4 +1,7 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 public class MomentoTry {
     public static void main(String[] args){
         // create document
@@ -13,13 +16,13 @@ public class MomentoTry {
         // let's print doc
         System.out.println("MomentoTry Example");
         doc.print();
-
-
     }
 }
 
 class Document{
     private String text;
+
+    private List actions =  new ArrayList <String>();
 
     Document(){
         text = "";
@@ -41,5 +44,9 @@ class Document{
     public void print(){
         System.out.println("Document.print()");
         System.out.println(text);
+    }
+
+    public void undo(){
+
     }
 }
