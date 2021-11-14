@@ -7,49 +7,57 @@ public class MementoTest {
     @Test
     public void testInitialization(){
         Editor editor = new Editor();
-        assertEquals("", editor.getString());
+        assertEquals("", editor.getText());
     }
 
     @Test
     public void testWrite(){
         Editor editor = new Editor();
-        assertEquals("", editor.getString());
+        assertEquals("", editor.getText());
         editor.write("Written");
-        assertEquals("Written", editor.getString());
+        assertEquals("Written", editor.getText());
     }
 
     @Test
     public void testRemoveWord(){
         Editor editor = new Editor();
-        assertEquals("", editor.getString());
+        assertEquals("", editor.getText());
         editor.write("Written Something");
         editor.removeWord();
-        assertEquals("Written", editor.getString());
-        assertNotEquals("Written Something",editor.getString());
+        assertEquals("Written", editor.getText());
+        assertNotEquals("Written Something",editor.getText());
     }
 
     @Test
     public void testUndo(){
         Editor editor = new Editor();
-        assertEquals("", editor.getString());
+        History history = new History();
+
+        assertEquals("", editor.getText());
+
+        history.push(editor.takeSnapShot());
         editor.write("Written Something");
+
+        history.push(editor.takeSnapShot());
         editor.removeWord();
-        assertEquals("Written", editor.getString());
+        assertEquals("Written", editor.getText());
 
-        editor.undo();
-        assertEquals("Written Something", editor.getString());
+        editor.undo(history.pop());
+        assertEquals("Written Something", editor.getText());
 
+        history.push(editor.takeSnapShot());
         editor.write(" Let's add this text.");
+
+        history.push(editor.takeSnapShot());
         editor.write(" Let's add more but this one should be removed because of undo.");
 
-        editor.undo();
-        assertEquals("Written Something Let's add this text.",editor.getString());
 
-        editor.undo();
-        editor.undo();
-        assertEquals("",editor.getString());
+        editor.undo(history.pop());
+        assertEquals("Written Something Let's add this text.",editor.getText());
 
-        editor.undo();
-        assertEquals("",editor.getString());
+        editor.undo(history.pop());
+        editor.undo(history.pop());
+        assertEquals("",editor.getText());
+
     }
 }
