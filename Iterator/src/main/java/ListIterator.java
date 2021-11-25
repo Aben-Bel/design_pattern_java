@@ -7,7 +7,7 @@ public class ListIterator implements Iterator {
     private List<Product> products;
     private int index = 0;
 
-    ListIterator(ArrayList products){
+    ListIterator(List products){
         this.products = products;
     }
 
